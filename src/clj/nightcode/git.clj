@@ -11,7 +11,6 @@
             CredentialItem$StringType
             CredentialItem$YesNoType
             CredentialsProvider
-            CredentialsProviderUserInfo
             URIish]))
 
 (defn boolean-dialog! [^Scene scene ^String text]
