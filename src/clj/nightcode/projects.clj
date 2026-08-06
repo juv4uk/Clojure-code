@@ -80,6 +80,10 @@
         repl (-> pane .getChildren (.get 1) .getItems (.get 1))
         *process (atom nil)
         web-port (:web-port @*runtime-state)
+        *lang (atom :en)
+        load-docs! (fn []
+                     (let [lang-file (if (= @*lang :en) "cheatsheet-full.html" "cheatsheet-full_uk.html")]
+                       (.load (.getEngine docs) (str "http://localhost:" web-port "/" lang-file))))
         load-repl! (fn []
                      (let [pipes (b/create-pipes)]
                        (b/init-console! "*Home*" *runtime-state repl pipes web-port
@@ -87,13 +91,20 @@
                            (b/refresh-builder! repl true @*pref-state)
                            (b/start-builder-process! repl pipes *process "Starting REPL..." "." ["clojure.main"])))))]
     ; load the panes
-    (.load (.getEngine docs) (str "http://localhost:" web-port "/cheatsheet-full.html"))
+    (load-docs!)
     (load-repl!)
     ; set button actions
     (let [back-btn (doto (.lookup pane "#back") (.setDisable true))
           forward-btn (doto (.lookup pane "#forward") (.setDisable true))
           restart-btn (.lookup pane "#restart")
+          lang-btn (.lookup pane "#lang_toggle")
           history (-> docs .getEngine .getHistory)]
+      (.setOnAction lang-btn
+        (reify EventHandler
+          (handle [this event]
+            (swap! *lang #(if (= % :en) :uk :en))
+            (.setText lang-btn (if (= @*lang :en) "Мова: EN" "Мова: UK"))
+            (load-docs!))))
       (.setOnAction back-btn
         (reify EventHandler
           (handle [this event]
