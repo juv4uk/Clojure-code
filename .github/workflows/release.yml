@@ -8,10 +8,26 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: Build ${{ matrix.os-name }}
+    runs-on: ${{ matrix.runner }}
     permissions:
       contents: write
-    
+    strategy:
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            os-name: linux
+            archive-cmd: tar -czf Clojure-code-linux.tar.gz Clojure-code
+            artifact-name: Clojure-code-linux.tar.gz
+          - runner: macos-latest
+            os-name: macos
+            archive-cmd: ditto -c -k --sequesterRsrc --keepParent Clojure-code.app Clojure-code-macos.zip
+            artifact-name: Clojure-code-macos.zip
+          - runner: windows-latest
+            os-name: windows
+            archive-cmd: Compress-Archive -Path Clojure-code -DestinationPath Clojure-code-windows.zip
+            artifact-name: Clojure-code-windows.zip
+            
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,34 +43,37 @@ jobs:
         with:
           cli: 1.11.2.1446
 
-      - name: Build Windows Uberjar
+      - name: Build Uberjar
+        shell: bash
         run: |
-          clojure -M:prod uberjar windows
-          mv target/clojure-code-*-standalone.jar target/clojure-code-windows.jar
+          clojure -M:prod uberjar ${{ matrix.os-name }}
+          mv target/clojure-code-*-standalone.jar target/clojure-code-${{ matrix.os-name }}.jar
 
-      - name: Build macOS Uberjar
+      - name: Create Executable with jpackage
+        shell: bash
         run: |
-          clojure -M:prod uberjar macos
-          mv target/clojure-code-*-standalone.jar target/clojure-code-macos.jar
+          jpackage --type app-image --name Clojure-code --input target/ --main-jar clojure-code-${{ matrix.os-name }}.jar --main-class nightcode.start
 
-      - name: Build Linux Uberjar
-        run: |
-          clojure -M:prod uberjar linux
-          mv target/clojure-code-*-standalone.jar target/clojure-code-linux.jar
+      - name: Archive Executable (Windows)
+        if: matrix.runner == 'windows-latest'
+        shell: powershell
+        run: ${{ matrix.archive-cmd }}
 
-      - name: Create Release
+      - name: Archive Executable (Linux/macOS)
+        if: matrix.runner != 'windows-latest'
+        shell: bash
+        run: ${{ matrix.archive-cmd }}
+
+      - name: Upload Uberjar to Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Clojure-code Release ${{ github.ref_name }}
-          body: |
-            **Clojure-code** is a modernized fork of the original Nightcode IDE.
-            
-            This release includes updated dependencies (Java 21, Clojure 1.11, modern JavaFX) for significantly improved startup times and performance.
-            
-            Download the appropriate `.jar` file for your operating system below and run it with `java -jar <filename>`.
-          files: |
-            target/clojure-code-windows.jar
-            target/clojure-code-macos.jar
-            target/clojure-code-linux.jar
+          files: target/clojure-code-${{ matrix.os-name }}.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Executable to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ matrix.artifact-name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
