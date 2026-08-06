@@ -216,35 +216,10 @@
   (when-let [project-path (u/get-project-path pref-state)]
     (stop-builder-process! runtime-state project-path)))
 
-(fdef show-boot-buttons!
-  :args (s/cat :pane spec/pane? :path string? :pref-state map? :*runtime-state spec/atom?))
-
 (defn show-boot-buttons! [pane path pref-state *runtime-state]
-  (when-let [task-buttons (some-> (get-tab pane :boot) .getContent (.lookup "#tasks"))]
-    (when-let [perm-tasks (.lookup task-buttons "#permanent_tasks")]
-      (doto task-buttons
-        shortcuts/hide-tooltips!
-        (shortcuts/remove-tooltips! custom-task-ids))
-      (-> task-buttons .getChildren .clear)
-      (doseq [task-name (u/get-boot-tasks path)]
-        (let [btn (Button.)]
-          (doto (.getStyleClass btn)
-            (.add task-name)
-            (.add "custom"))
-          (doto btn
-            (.setText (->> (str/split task-name #"-")
-                           (map str/capitalize)
-                           (str/join " ")))
-            (.setOnAction
-              (reify EventHandler
-                (handle [this event]
-                  (start-builder! pref-state *runtime-state (str "Starting " task-name " task...") task-name)))))
-          (-> task-buttons .getChildren (.add btn))))
-      (-> task-buttons .getChildren (.add perm-tasks))
-      ; for certain custom tasks, add tooltips
-      (doto task-buttons
-        (shortcuts/add-tooltips! custom-task-ids)
-        shortcuts/hide-tooltips!))))
+  ;; Boot build system is no longer maintained (deprecated since 2018).
+  ;; Kept as a stub to avoid breaking UI tab structure.
+  nil)
 
 (fdef init-builder!
   :args (s/cat :pane spec/pane? :path string? :pref-state map? :*runtime-state spec/atom?))
@@ -259,12 +234,10 @@
           (some-> old-value .getContent (shortcuts/remove-tooltips! ids))
           (some-> new-value .getContent (shortcuts/add-tooltips! ids)))))
     ; select/disable build tabs
-    (cond
-      (:boot systems) (do
-                        (select-build-system! pane :boot ids)
-                        (show-boot-buttons! pane path pref-state *runtime-state))
-      (:lein systems) (select-build-system! pane :lein ids))
-    (.setDisable (get-tab pane :boot) (not (:boot systems)))
+    ; Boot is always disabled — no longer maintained
+    (when (:lein systems)
+      (select-build-system! pane :lein ids))
+    (.setDisable (get-tab pane :boot) true)
     (.setDisable (get-tab pane :lein) (not (:lein systems)))
     ; init the tabs
     (doseq [system systems]

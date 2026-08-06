@@ -21,8 +21,8 @@ jobs:
             artifact-name: Clojure-code-linux.tar.gz
           - runner: macos-latest
             os-name: macos
-            archive-cmd: ditto -c -k --sequesterRsrc --keepParent Clojure-code.app Clojure-code-macos.zip
-            artifact-name: Clojure-code-macos.zip
+            archive-cmd: tar -czf Clojure-code-macos.tar.gz Clojure-code
+            artifact-name: Clojure-code-macos.tar.gz
           - runner: windows-latest
             os-name: windows
             archive-cmd: Compress-Archive -Path Clojure-code -DestinationPath Clojure-code-windows.zip

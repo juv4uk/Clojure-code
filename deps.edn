@@ -24,4 +24,6 @@
            :linux {:extra-deps {org.openjfx/javafx-graphics$linux {:mvn/version "21.0.2"}
                                 org.openjfx/javafx-web$linux {:mvn/version "21.0.2"}}}
            :kondo {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2024.03.13"}}
-                   :main-opts ["-m" "clj-kondo.main"]}}}
+                   :main-opts ["-m" "clj-kondo.main"]}
+           :test {:extra-paths ["test/clj"]
+                  :extra-deps {org.clojure/test.check {:mvn/version "1.1.1"}}}}}

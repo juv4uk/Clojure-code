@@ -75,15 +75,12 @@
   :ret (s/coll-of keyword?))
 
 (defn build-systems
-  "Returns a set containing :boot and/or :lein if the given path contains the
-requisite project files, or empty if neither exists."
+  "Returns a set containing :lein if the given path contains project.clj.
+   Boot support has been removed (deprecated since 2018)."
   [^String path]
   (let [file (io/file path)
         dir? (.isDirectory file)
         types #{}
-        types (if (and dir? (.exists (io/file file "build.boot")))
-                (conj types :boot)
-                types)
         types (if (and dir? (.exists (io/file file "project.clj")))
                 (conj types :lein)
                 types)]
@@ -171,6 +168,10 @@ requisite project files, or empty if neither exists."
   :ret string?)
 
 (defn get-boot-path! []
+  ;; DEPRECATED: Boot is no longer maintained. This function exists only for
+  ;; backward compatibility and will be removed in a future version.
+  (binding [*out* *err*]
+    (println "WARNING: Boot build system is deprecated and no longer supported."))
   (let [file-name "boot-2.7.2.jar"
         file (io/file (System/getProperty "user.home") (str ".nightcode-" file-name))]
     (when-not (.exists file)
