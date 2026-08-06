@@ -17,16 +17,10 @@ jobs:
         include:
           - runner: ubuntu-latest
             os-name: linux
-            archive-cmd: tar -czf Clojure-code-linux.tar.gz Clojure-code
-            artifact-name: Clojure-code-linux.tar.gz
           - runner: macos-latest
             os-name: macos
-            archive-cmd: tar -czf Clojure-code-macos.tar.gz Clojure-code
-            artifact-name: Clojure-code-macos.tar.gz
           - runner: windows-latest
             os-name: windows
-            archive-cmd: Compress-Archive -Path Clojure-code -DestinationPath Clojure-code-windows.zip
-            artifact-name: Clojure-code-windows.zip
             
     steps:
       - name: Checkout repository
@@ -61,23 +55,23 @@ jobs:
         if: matrix.runner != 'windows-latest'
         shell: bash
         run: |
-          jpackage --type app-image --name Clojure-code --input target/ --main-jar clojure-code-${{ matrix.os-name }}.jar --main-class nightcode.start
+          jpackage --type app-image --name Clojure-code-${{ github.ref_name }} --input target/ --main-jar clojure-code-${{ matrix.os-name }}.jar --main-class nightcode.start
 
       - name: Create Executable with jpackage (Windows)
         if: matrix.runner == 'windows-latest'
         shell: pwsh
         run: |
-          jpackage --type app-image --name Clojure-code --input target/ --main-jar clojure-code-${{ matrix.os-name }}.jar --main-class nightcode.start
+          jpackage --type app-image --name Clojure-code-${{ github.ref_name }} --input target/ --main-jar clojure-code-${{ matrix.os-name }}.jar --main-class nightcode.start
 
       - name: Archive Executable (Windows)
         if: matrix.runner == 'windows-latest'
         shell: powershell
-        run: ${{ matrix.archive-cmd }}
+        run: Compress-Archive -Path Clojure-code-${{ github.ref_name }} -DestinationPath Clojure-code-windows-${{ github.ref_name }}.zip
 
       - name: Archive Executable (Linux/macOS)
         if: matrix.runner != 'windows-latest'
         shell: bash
-        run: ${{ matrix.archive-cmd }}
+        run: tar -czf Clojure-code-${{ matrix.os-name }}-${{ github.ref_name }}.tar.gz Clojure-code-${{ github.ref_name }}
 
       - name: Upload Uberjar to Artifacts
         uses: actions/upload-artifact@v4
@@ -90,7 +84,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: executable-${{ matrix.os-name }}
-          path: ${{ matrix.artifact-name }}
+          path: Clojure-code-${{ matrix.os-name }}-${{ github.ref_name }}.*
           retention-days: 1
 
   release:
