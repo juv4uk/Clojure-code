@@ -29,17 +29,17 @@ jobs:
 
       - name: Build Windows Uberjar
         run: |
-          clj -M:prod uberjar windows
+          clojure -M:prod uberjar windows
           mv target/clojure-code-*-standalone.jar target/clojure-code-windows.jar
 
       - name: Build macOS Uberjar
         run: |
-          clj -M:prod uberjar macos
+          clojure -M:prod uberjar macos
           mv target/clojure-code-*-standalone.jar target/clojure-code-macos.jar
 
       - name: Build Linux Uberjar
         run: |
-          clj -M:prod uberjar linux
+          clojure -M:prod uberjar linux
           mv target/clojure-code-*-standalone.jar target/clojure-code-linux.jar
 
       - name: Create Release
