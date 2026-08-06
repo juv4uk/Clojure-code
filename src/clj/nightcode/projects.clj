@@ -80,9 +80,8 @@
         repl (-> pane .getChildren (.get 1) .getItems (.get 1))
         *process (atom nil)
         web-port (:web-port @*runtime-state)
-        *lang (atom :en)
         load-docs! (fn []
-                     (let [lang-file (if (= @*lang :en) "cheatsheet-full.html" "cheatsheet-full_uk.html")]
+                     (let [lang-file (if (= (:lang @*pref-state) :en) "cheatsheet-full.html" "cheatsheet-full_uk.html")]
                        (.load (.getEngine docs) (str "http://localhost:" web-port "/" lang-file))))
         load-repl! (fn []
                      (let [pipes (b/create-pipes)]
@@ -97,14 +96,18 @@
     (let [back-btn (doto (.lookup pane "#back") (.setDisable true))
           forward-btn (doto (.lookup pane "#forward") (.setDisable true))
           restart-btn (.lookup pane "#restart")
-          lang-btn (.lookup pane "#lang_toggle")
+          lang-btn (doto (.lookup pane "#lang_toggle")
+                     (.setText (if (= (:lang @*pref-state) :en) "Мова: EN" "Мова: UK")))
           history (-> docs .getEngine .getHistory)]
       (.setOnAction lang-btn
         (reify EventHandler
           (handle [this event]
-            (swap! *lang #(if (= % :en) :uk :en))
-            (.setText lang-btn (if (= @*lang :en) "Мова: EN" "Мова: UK"))
-            (load-docs!))))
+            (swap! *pref-state update :lang #(if (= % :en) :uk :en))
+            (let [lang (:lang @*pref-state)]
+              (.setText lang-btn (if (= lang :en) "Мова: EN" "Мова: UK"))
+              (load-docs!)
+              (when-let [stage (:stage @*runtime-state)]
+                (u/apply-translations! (.getRoot (.getScene stage)) lang))))))
       (.setOnAction back-btn
         (reify EventHandler
           (handle [this event]
@@ -360,6 +363,7 @@
                 (doto (.getChildren content)
                   (.clear)
                   (.add new-pane))
+                (u/apply-translations! new-pane (:lang @*pref-state))
                 (Platform/runLater
                   (fn []
                     (.focus new-value new-pane)))))))))))

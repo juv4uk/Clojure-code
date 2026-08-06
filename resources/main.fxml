@@ -22,23 +22,23 @@
                <children>
                   <MenuButton fx:id="start" minWidth="-Infinity" mnemonicParsing="false" text="Start">
                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onNewConsoleProject" text="Console Project" />
-                        <MenuItem mnemonicParsing="false" onAction="#onNewGraphicsProject" text="Graphics Project" />
-                        <MenuItem mnemonicParsing="false" onAction="#onNewWebProject" text="Web Project" />
-                        <MenuItem mnemonicParsing="false" onAction="#onNewGameProject" text="Game Project" />
-                        <MenuItem mnemonicParsing="false" onAction="#onNewMusicProject" text="Music Project" />
-                        <MenuItem mnemonicParsing="false" onAction="#onCloneFromGit" text="Clone from Git" />
+                        <MenuItem fx:id="new_console_project" mnemonicParsing="false" onAction="#onNewConsoleProject" text="Console Project" />
+                        <MenuItem fx:id="new_graphics_project" mnemonicParsing="false" onAction="#onNewGraphicsProject" text="Graphics Project" />
+                        <MenuItem fx:id="new_web_project" mnemonicParsing="false" onAction="#onNewWebProject" text="Web Project" />
+                        <MenuItem fx:id="new_game_project" mnemonicParsing="false" onAction="#onNewGameProject" text="Game Project" />
+                        <MenuItem fx:id="new_music_project" mnemonicParsing="false" onAction="#onNewMusicProject" text="Music Project" />
+                        <MenuItem fx:id="clone_from_git" mnemonicParsing="false" onAction="#onCloneFromGit" text="Clone from Git" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <CustomMenuItem fx:id="theme_buttons" hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
                            <content>
                               <HBox>
                                  <children>
-                                    <ToggleButton minWidth="-Infinity" mnemonicParsing="false" onAction="#onDarkTheme" text="Dark">
+                                    <ToggleButton fx:id="theme_dark" minWidth="-Infinity" mnemonicParsing="false" onAction="#onDarkTheme" text="Dark">
                                        <toggleGroup>
                                           <ToggleGroup fx:id="theme" />
                                        </toggleGroup>
                                     </ToggleButton>
-                                    <ToggleButton minWidth="-Infinity" mnemonicParsing="false" onAction="#onLightTheme" text="Light" toggleGroup="$theme" />
+                                    <ToggleButton fx:id="theme_light" minWidth="-Infinity" mnemonicParsing="false" onAction="#onLightTheme" text="Light" toggleGroup="$theme" />
                                  </children>
                               </HBox>
                            </content>
@@ -47,8 +47,8 @@
                            <content>
                               <HBox>
                                  <children>
-                                    <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#onFontDec" text="Font -" />
-                                    <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#onFontInc" text="Font +" />
+                                    <Button fx:id="font_dec" minWidth="-Infinity" mnemonicParsing="false" onAction="#onFontDec" text="Font -" />
+                                    <Button fx:id="font_inc" minWidth="-Infinity" mnemonicParsing="false" onAction="#onFontInc" text="Font +" />
                                  </children>
                               </HBox>
                            </content>

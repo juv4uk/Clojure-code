@@ -277,3 +277,68 @@
         (remove empty? $)
         (str/join "-" $)))
 
+; ui translations
+
+(def ^:const menu-translations
+  "CSS selectors (id or class) for translatable Node-based controls, mapped to their text per language."
+  {"#new_file" {:en "New File" :uk "Новий файл"}
+   "#open_in_file_browser" {:en "Open in File Browser" :uk "Відкрити у провіднику"}
+   "#save" {:en "Save" :uk "Зберегти"}
+   "#undo" {:en "Undo" :uk "Скасувати"}
+   "#redo" {:en "Redo" :uk "Повторити"}
+   "#restart" {:en "Restart REPL" :uk "Перезапустити REPL"}
+   "#start" {:en "Start" :uk "Старт"}
+   "#theme_dark" {:en "Dark" :uk "Темна"}
+   "#theme_light" {:en "Light" :uk "Світла"}
+   "#font_dec" {:en "Font -" :uk "Шрифт -"}
+   "#font_inc" {:en "Font +" :uk "Шрифт +"}
+   "#import_project" {:en "Import" :uk "Імпорт"}
+   "#rename" {:en "Rename" :uk "Перейменувати"}
+   "#remove" {:en "Remove" :uk "Видалити"}
+   ".run-with-repl" {:en "Run with REPL" :uk "Запустити з REPL"}
+   ".reload-file" {:en "Reload File" :uk "Перезавантажити файл"}
+   ".reload-selection" {:en "Reload Selection" :uk "Перезавантажити виділене"}
+   ".stop" {:en "Stop" :uk "Зупинити"}
+   ".run" {:en "Run" :uk "Запустити"}
+   ".build" {:en "Build" :uk "Зібрати"}
+   ".clean" {:en "Clean" :uk "Очистити"}
+   ".test" {:en "Test" :uk "Тестувати"}})
+
+(def ^:const menu-prompt-translations
+  "CSS selectors for translatable prompt text, mapped to their text per language."
+  {"#find" {:en "Find" :uk "Пошук"}})
+
+(def ^:const menu-item-translations
+  "fx:ids of MenuItem/CheckMenuItem controls, mapped to their text per language.
+   MenuItems aren't part of the Node scene graph, so they can't be reached via
+   lookupAll and need to be matched by id explicitly."
+  {"new_console_project" {:en "Console Project" :uk "Консольний проєкт"}
+   "new_graphics_project" {:en "Graphics Project" :uk "Графічний проєкт"}
+   "new_web_project" {:en "Web Project" :uk "Веб проєкт"}
+   "new_game_project" {:en "Game Project" :uk "Ігровий проєкт"}
+   "new_music_project" {:en "Music Project" :uk "Музичний проєкт"}
+   "clone_from_git" {:en "Clone from Git" :uk "Клонувати з Git"}
+   "auto_save" {:en "Auto Save" :uk "Автозбереження"}})
+
+(fdef apply-translations!
+  :args (s/cat :node spec/node? :lang keyword?))
+
+(defn apply-translations!
+  "Sets the text of every translatable control found within the given node
+   (and its descendants) to match the given language (:en or :uk)."
+  [node lang]
+  (doseq [[selector strs] menu-translations
+          ctrl (.lookupAll node selector)]
+    (.setText ctrl (get strs lang (:en strs))))
+  (doseq [[selector strs] menu-prompt-translations
+          ctrl (.lookupAll node selector)]
+    (.setPromptText ctrl (get strs lang (:en strs))))
+  ; MenuItems live in a MenuButton's popup, not the main scene graph, so walk
+  ; them explicitly instead of relying on lookupAll.
+  (doseq [menu-button (.lookupAll node "MenuButton")
+          item (.getItems menu-button)]
+    (if (instance? javafx.scene.control.CustomMenuItem item)
+      (apply-translations! (.getContent item) lang)
+      (when-let [strs (get menu-item-translations (.getId item))]
+        (.setText item (get strs lang (:en strs)))))))
+
