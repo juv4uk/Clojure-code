@@ -30,8 +30,17 @@ if ($content -eq $newContent) {
     Write-Host "Successfully updated project.clj."
 }
 
+$coreFile = "src\clj\nightcode\core.clj"
+if (Test-Path $coreFile) {
+    Write-Host "Updating window title in core.clj..."
+    $coreContent = Get-Content $coreFile -Raw
+    $newCoreContent = $coreContent -replace '\(\.setTitle "Clojure-code [^"]+"', "(.setTitle `"Clojure-code $Version`""
+    Set-Content -Path $coreFile -Value $newCoreContent -NoNewline
+}
+
 Write-Host "2. Committing changes..."
 git add $projectFile
+git add $coreFile
 # Check if there are changes to commit
 $gitStatus = git status --porcelain
 if ($gitStatus -match "project.clj") {
