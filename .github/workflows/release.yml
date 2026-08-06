@@ -10,9 +10,8 @@ jobs:
   build:
     name: Build ${{ matrix.os-name }}
     runs-on: ${{ matrix.runner }}
-    permissions:
-      contents: write
     strategy:
+      fail-fast: false
       matrix:
         include:
           - runner: ubuntu-latest
@@ -64,16 +63,36 @@ jobs:
         shell: bash
         run: ${{ matrix.archive-cmd }}
 
-      - name: Upload Uberjar to Release
-        uses: softprops/action-gh-release@v2
+      - name: Upload Uberjar to Artifacts
+        uses: actions/upload-artifact@v4
         with:
-          files: target/clojure-code-${{ matrix.os-name }}.jar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: jar-${{ matrix.os-name }}
+          path: target/clojure-code-${{ matrix.os-name }}.jar
+          retention-days: 1
 
-      - name: Upload Executable to Release
+      - name: Upload Executable to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: executable-${{ matrix.os-name }}
+          path: ${{ matrix.artifact-name }}
+          retention-days: 1
+
+  release:
+    name: Publish Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+          merge-multiple: true
+
+      - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ matrix.artifact-name }}
+          files: release-artifacts/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
