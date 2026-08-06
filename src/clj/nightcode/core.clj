@@ -53,7 +53,7 @@
     (u/apply-translations! root (:lang @*pref-state))
     (swap! *pref-state update :expansion-set u/filter-paths)
     (doto stage
-      (.setTitle "Clojure-code 1.0.0")
+      (.setTitle "Clojure-code 1.1.0")
       (.setScene scene)
       (.show))
     (shortcuts/init-tabs! scene)
