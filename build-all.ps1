@@ -13,7 +13,7 @@ clj -M:prod uberjar windows
 Move-Item -Path "target\clojure-code-$version-standalone.jar" -Destination "target\clojure-code-windows.jar" -Force
 if (Get-Command jpackage -ErrorAction SilentlyContinue) {
     Write-Host "Creating Windows executable with jpackage..."
-    jpackage --type app-image --name "Clojure-code-$version" --app-version $version --input target/ --main-jar clojure-code-windows.jar --main-class nightcode.start --icon package/windows/Nightcode.ico
+    jpackage --type app-image --name "Clojure-code-$version" --app-version $version --input target/ --main-jar clojure-code-windows.jar --main-class nightcode.start --icon graphics/icon.ico
 }
 
 Write-Host "Building for macOS..."

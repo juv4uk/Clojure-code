@@ -1,3 +1,5 @@
+![Clojure-code Banner](graphics/banner.png)
+
 ![screenshot](screenshot.png)
 
 ## Introduction
