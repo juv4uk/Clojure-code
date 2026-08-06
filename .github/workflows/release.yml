@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Clojure
+        uses: DeLaGuardo/setup-clojure@12.5
+        with:
+          cli: 1.11.2.1446
+
+      - name: Build Windows Uberjar
+        run: |
+          clj -M:prod uberjar windows
+          mv target/clojure-code-*-standalone.jar target/clojure-code-windows.jar
+
+      - name: Build macOS Uberjar
+        run: |
+          clj -M:prod uberjar macos
+          mv target/clojure-code-*-standalone.jar target/clojure-code-macos.jar
+
+      - name: Build Linux Uberjar
+        run: |
+          clj -M:prod uberjar linux
+          mv target/clojure-code-*-standalone.jar target/clojure-code-linux.jar
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Clojure-code Release ${{ github.ref_name }}
+          body: |
+            **Clojure-code** is a modernized fork of the original Nightcode IDE.
+            
+            This release includes updated dependencies (Java 21, Clojure 1.11, modern JavaFX) for significantly improved startup times and performance.
+            
+            Download the appropriate `.jar` file for your operating system below and run it with `java -jar <filename>`.
+          files: |
+            target/clojure-code-windows.jar
+            target/clojure-code-macos.jar
+            target/clojure-code-linux.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
