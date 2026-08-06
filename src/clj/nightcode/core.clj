@@ -51,7 +51,7 @@
                        :auto-save? true})
     (swap! *pref-state update :expansion-set u/filter-paths)
     (doto stage
-      (.setTitle "Nightcode 2.8.3")
+      (.setTitle "Clojure-code 1.0.0")
       (.setScene scene)
       (.show))
     (shortcuts/init-tabs! scene)
