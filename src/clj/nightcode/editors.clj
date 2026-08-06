@@ -145,23 +145,23 @@
           clojure? (-> file .getName u/get-extension u/clojure-exts some?)
           path (.getCanonicalPath file)
           bridge (reify Bridge
-                   (onload [this]
+                   (onload [_]
                      (try
                        (onload engine file @*pref-state clojure?)
                        (catch Exception e (.printStackTrace e))))
-                   (onautosave [this]
+                   (onautosave [_]
                      (try
                        (let [save-btn (.lookup pane "#save")]
                          (when (and (:auto-save? @*pref-state)
                                     (not (.isDisabled save-btn)))
                            (save-file! path engine)))
                        (catch Exception e (.printStackTrace e))))
-                   (onchange [this]
+                   (onchange [_]
                      (try
                        (update-editor-buttons! pane engine)
                        (catch Exception e (.printStackTrace e))))
-                   (onenter [this text])
-                   (oneval [this code]
+                   (onenter [_ _])
+                   (oneval [_ code]
                      (when (and eval-fn
                                 (-> pane
                                     (.lookup "#instarepl")

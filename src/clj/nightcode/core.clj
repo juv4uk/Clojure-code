@@ -35,7 +35,7 @@
               :#new_file c/new-file!
               :#open_in_file_browser c/open-in-file-browser!})
 
-(defn -start [^nightcode.core app ^Stage stage]
+(defn -start [^nightcode.core _ ^Stage stage]
   (let [root (FXMLLoader/load (io/resource "main.fxml"))
         scene (Scene. root 1200 600)
         project-tree (.lookup scene "#project_tree")

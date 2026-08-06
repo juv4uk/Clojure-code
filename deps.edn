@@ -22,4 +22,6 @@
            :macos {:extra-deps {org.openjfx/javafx-graphics$mac {:mvn/version "21.0.2"}
                                 org.openjfx/javafx-web$mac {:mvn/version "21.0.2"}}}
            :linux {:extra-deps {org.openjfx/javafx-graphics$linux {:mvn/version "21.0.2"}
-                                org.openjfx/javafx-web$linux {:mvn/version "21.0.2"}}}}}
+                                org.openjfx/javafx-web$linux {:mvn/version "21.0.2"}}}
+           :kondo {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2024.03.13"}}
+                   :main-opts ["-m" "clj-kondo.main"]}}}
