@@ -42,26 +42,26 @@ jobs:
         shell: bash
         run: |
           clojure -M:prod uberjar ${{ matrix.os-name }}
-          mv target/clojure-code-*-standalone.jar target/clojure-code-${{ matrix.os-name }}.jar
+          mv target/clojure-code-*-standalone.jar target/clojure-code-${{ matrix.os-name }}-${{ github.ref_name }}.jar
 
       - name: Build Uberjar (Windows)
         if: matrix.runner == 'windows-latest'
         shell: pwsh
         run: |
           clojure -M:prod uberjar ${{ matrix.os-name }}
-          Move-Item target/clojure-code-*-standalone.jar target/clojure-code-${{ matrix.os-name }}.jar
+          Move-Item target/clojure-code-*-standalone.jar target/clojure-code-${{ matrix.os-name }}-${{ github.ref_name }}.jar
 
       - name: Create Executable with jpackage (Linux/macOS)
         if: matrix.runner != 'windows-latest'
         shell: bash
         run: |
-          jpackage --type app-image --name Clojure-code-${{ github.ref_name }} --input target/ --main-jar clojure-code-${{ matrix.os-name }}.jar --main-class nightcode.start
+          jpackage --type app-image --name Clojure-code-${{ github.ref_name }} --input target/ --main-jar clojure-code-${{ matrix.os-name }}-${{ github.ref_name }}.jar --main-class nightcode.start
 
       - name: Create Executable with jpackage (Windows)
         if: matrix.runner == 'windows-latest'
         shell: pwsh
         run: |
-          jpackage --type app-image --name Clojure-code-${{ github.ref_name }} --input target/ --main-jar clojure-code-${{ matrix.os-name }}.jar --main-class nightcode.start
+          jpackage --type app-image --name Clojure-code-${{ github.ref_name }} --input target/ --main-jar clojure-code-${{ matrix.os-name }}-${{ github.ref_name }}.jar --main-class nightcode.start
 
       - name: Archive Executable (Windows)
         if: matrix.runner == 'windows-latest'
@@ -85,7 +85,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jar-${{ matrix.os-name }}
-          path: target/clojure-code-${{ matrix.os-name }}.jar
+          path: target/clojure-code-${{ matrix.os-name }}-${{ github.ref_name }}.jar
           retention-days: 1
 
       - name: Upload Executable to Artifacts
