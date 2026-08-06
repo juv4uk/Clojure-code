@@ -1,20 +1,20 @@
 {:paths ["src/clj" "src/cljs" "resources" "classes"]
  :deps {org.clojure/clojure {:mvn/version "1.11.2"}
-        leiningen {:mvn/version "2.9.0" :exclusions [leiningen.search]}
-        ring {:mvn/version "1.11.0"}
-        hawk {:mvn/version "0.2.11"}
-        eval-soup {:mvn/version "1.5.0" :exclusions [org.clojure/core.async]}
+        leiningen/leiningen {:mvn/version "2.9.0" :exclusions [leiningen.search/leiningen.search]}
+        ring/ring {:mvn/version "1.11.0"}
+        hawk/hawk {:mvn/version "0.2.11"}
+        eval-soup/eval-soup {:mvn/version "1.5.0" :exclusions [org.clojure/core.async]}
         org.eclipse.jgit/org.eclipse.jgit {:mvn/version "6.8.0.202311291450-r"}
         org.openjfx/javafx-base {:mvn/version "21.0.2"}
         org.openjfx/javafx-fxml {:mvn/version "21.0.2"}
         org.openjfx/javafx-graphics {:mvn/version "21.0.2"}
         org.openjfx/javafx-web {:mvn/version "21.0.2"}}
  :aliases {:cljs {:extra-deps {org.clojure/clojurescript {:mvn/version "1.11.132"}
-                               paren-soup {:mvn/version "2.16.0"}}
+                               paren-soup/paren-soup {:mvn/version "2.16.0"}}
                   :extra-paths ["dev-resources"]
                   :main-opts ["cljs.clj"]}
-           :dev {:extra-deps {orchestra {:mvn/version "2018.12.06-2"}
-                              expound {:mvn/version "0.7.2"}}
+           :dev {:extra-deps {orchestra/orchestra {:mvn/version "2018.12.06-2"}
+                              expound/expound {:mvn/version "0.7.2"}}
                  :main-opts ["dev.clj"]}
            :prod {:main-opts ["prod.clj"]}
            :windows {:extra-deps {org.openjfx/javafx-graphics$win {:mvn/version "21.0.2"}
