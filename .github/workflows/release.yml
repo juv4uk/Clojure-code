@@ -43,14 +43,29 @@ jobs:
         with:
           cli: 1.11.2.1446
 
-      - name: Build Uberjar
+      - name: Build Uberjar (Linux/macOS)
+        if: matrix.runner != 'windows-latest'
         shell: bash
         run: |
           clojure -M:prod uberjar ${{ matrix.os-name }}
           mv target/clojure-code-*-standalone.jar target/clojure-code-${{ matrix.os-name }}.jar
 
-      - name: Create Executable with jpackage
+      - name: Build Uberjar (Windows)
+        if: matrix.runner == 'windows-latest'
+        shell: pwsh
+        run: |
+          clojure -M:prod uberjar ${{ matrix.os-name }}
+          Move-Item target/clojure-code-*-standalone.jar target/clojure-code-${{ matrix.os-name }}.jar
+
+      - name: Create Executable with jpackage (Linux/macOS)
+        if: matrix.runner != 'windows-latest'
         shell: bash
+        run: |
+          jpackage --type app-image --name Clojure-code --input target/ --main-jar clojure-code-${{ matrix.os-name }}.jar --main-class nightcode.start
+
+      - name: Create Executable with jpackage (Windows)
+        if: matrix.runner == 'windows-latest'
+        shell: pwsh
         run: |
           jpackage --type app-image --name Clojure-code --input target/ --main-jar clojure-code-${{ matrix.os-name }}.jar --main-class nightcode.start
 
