@@ -1,4 +1,6 @@
-![Clojure-code Banner](graphics/banner.png)
+<div align="center">
+  <img src="graphics/banner.svg" alt="Clojure-code Banner" width="800">
+</div>
 
 [![Build Status](https://github.com/juv4uk/Clojure-code/actions/workflows/release.yml/badge.svg)](https://github.com/juv4uk/Clojure-code/actions/workflows/release.yml)
 [![GitHub release](https://img.shields.io/github/release/juv4uk/Clojure-code.svg)](https://github.com/juv4uk/Clojure-code/releases/latest)
