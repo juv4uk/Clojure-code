@@ -14,8 +14,12 @@
                           (into-array args)
                           nil
                           (io/file path)))
-  (.addShutdownHook (Runtime/getRuntime)
-                    (Thread. #(when @*process (.destroy @*process))))
+  ; only register one shutdown hook per *process atom, not one per run,
+  ; or repeated runs would accumulate a hook (and thread) for the app's lifetime
+  (when-not (::shutdown-hook (meta *process))
+    (.addShutdownHook (Runtime/getRuntime)
+                      (Thread. #(when @*process (.destroy @*process))))
+    (alter-meta! *process assoc ::shutdown-hook true))
   (with-open [out (io/reader (.getInputStream @*process))
               err (io/reader (.getErrorStream @*process))
               in (io/writer (.getOutputStream @*process))]
