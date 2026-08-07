@@ -19,8 +19,8 @@
            :prod {:main-opts ["prod.clj"]}
            :windows {:extra-deps {org.openjfx/javafx-graphics$win {:mvn/version "21.0.12"}
                                   org.openjfx/javafx-web$win {:mvn/version "21.0.12"}}}
-           :macos {:extra-deps {org.openjfx/javafx-graphics$mac {:mvn/version "21.0.12"}
-                                org.openjfx/javafx-web$mac {:mvn/version "21.0.12"}}}
+           :macos {:extra-deps {org.openjfx/javafx-graphics$mac-aarch64 {:mvn/version "21.0.12"}
+                                org.openjfx/javafx-web$mac-aarch64 {:mvn/version "21.0.12"}}}
            :macos-intel {:extra-deps {org.openjfx/javafx-graphics$mac {:mvn/version "21.0.12"}
                                       org.openjfx/javafx-web$mac {:mvn/version "21.0.12"}}}
            :linux {:extra-deps {org.openjfx/javafx-graphics$linux {:mvn/version "21.0.12"}
