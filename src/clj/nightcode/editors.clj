@@ -45,7 +45,7 @@
   (-> handler
       (wrap-resource "public")
       (wrap-content-type)
-      (run-jetty {:port 0 :join? false})
+      (run-jetty {:host "127.0.0.1" :port 0 :join? false})
       .getConnectors
       (aget 0)
       .getLocalPort))
