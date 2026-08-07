@@ -17,11 +17,15 @@ jobs:
         include:
           - runner: ubuntu-latest
             os-name: linux
+          - runner: ubuntu-24.04-arm
+            os-name: linux-arm64
           - runner: macos-latest
             os-name: macos
+          - runner: macos-13
+            os-name: macos-intel
           - runner: windows-latest
             os-name: windows
-            
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -74,7 +78,7 @@ jobs:
         run: |
           # jpackage wraps app-image output in a .app bundle on macOS,
           # but produces a plain directory on Linux.
-          if [ "${{ matrix.os-name }}" = "macos" ]; then
+          if [[ "${{ matrix.os-name }}" == macos* ]]; then
             src="Clojure-code-${{ github.ref_name }}.app"
           else
             src="Clojure-code-${{ github.ref_name }}"

@@ -50,7 +50,7 @@
 
 (defmethod task "uberjar"
   [[_ os-name]]
-  (when-not (#{"windows" "macos" "linux"} os-name)
+  (when-not (#{"windows" "macos" "macos-intel" "linux" "linux-arm64"} os-name)
     (throw (ex-info "Invalid OS name provided" {})))
   (let [project (-> (read-project-clj)
                     (merge (read-deps-edn [(keyword os-name)]))
