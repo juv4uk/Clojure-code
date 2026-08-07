@@ -1,4 +1,4 @@
-(defproject clojure-code "1.1.2"
+(defproject clojure-code "1.1.3"
   :description "Clojure-code: A modernised fork of the Nightcode IDE"
   :url "https://github.com/juv4uk/Clojure-code"
   :license {:name "Public Domain"
