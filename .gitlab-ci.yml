@@ -1,0 +1,31 @@
+image: clojure:temurin-21-tools-deps
+
+stages:
+  - build
+  - test
+
+variables:
+  GIT_DEPTH: "1"
+
+build-linux:
+  stage: build
+  script:
+    - clojure -M:prod uberjar linux
+    - mv target/clojure-code-*-standalone.jar target/clojure-code-linux.jar
+  artifacts:
+    paths:
+      - target/clojure-code-linux.jar
+    expire_in: 1 week
+  rules:
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+test:
+  stage: test
+  script:
+    - clojure -M:test -e "(require 'clojure.test) (require 'nightcode.utils-test 'nightcode.builders-test 'nightcode.git-test 'nightcode.lein-test) (let [r (clojure.test/run-tests 'nightcode.utils-test 'nightcode.builders-test 'nightcode.git-test 'nightcode.lein-test)] (System/exit (if (zero? (+ (:fail r) (:error r))) 0 1)))"
+  rules:
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
