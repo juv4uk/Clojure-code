@@ -16,6 +16,11 @@
 
 `Clojure-code` ist ein modernisierter Fork von [Nightcode](https://github.com/oakes/Nightcode), mit aktualisierten Abhängigkeiten, modernem JavaFX und Java 21 für deutlich schnelleren Start und bessere Performance.
 
+## Contributors · Автори · Mitwirkende
+
+- [**juv4uk**](https://github.com/juv4uk) — fork maintainer / мейнтейнер форку / Fork-Maintainer
+- Originally created by [Zach Oakes](https://github.com/oakes) and the [Nightcode contributors](https://github.com/oakes/Nightcode/graphs/contributors)
+
 ---
 
 ## English
