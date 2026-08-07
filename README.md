@@ -39,7 +39,7 @@ java -jar clojure-code-<os>.jar
 * Install [the Clojure CLI tool](https://clojure.org/guides/getting_started#_clojure_installer_and_cli_tools)
 * To develop: `clj -M:dev`
 * To build the ClojureScript files: `clj -M:cljs`
-* To run the tests: see [TESTING.md](TESTING.md)
+* To run the tests: see [TESTING.md](docs/TESTING.md)
 * To build the uberjar for each OS locally:
   * `clj -M:prod uberjar windows`
   * `clj -M:prod uberjar macos`
@@ -74,7 +74,7 @@ java -jar clojure-code-<os>.jar
 * Встановіть [Clojure CLI tool](https://clojure.org/guides/getting_started#_clojure_installer_and_cli_tools)
 * Для розробки: `clj -M:dev`
 * Для збірки файлів ClojureScript: `clj -M:cljs`
-* Для запуску тестів: див. [TESTING.md](TESTING.md)
+* Для запуску тестів: див. [TESTING.md](docs/TESTING.md)
 * Для локальної збірки uberjar під кожну ОС:
   * `clj -M:prod uberjar windows`
   * `clj -M:prod uberjar macos`
@@ -109,7 +109,7 @@ java -jar clojure-code-<os>.jar
 * [Das Clojure-CLI-Tool](https://clojure.org/guides/getting_started#_clojure_installer_and_cli_tools) installieren
 * Zum Entwickeln: `clj -M:dev`
 * Um die ClojureScript-Dateien zu bauen: `clj -M:cljs`
-* Um die Tests auszuführen: siehe [TESTING.md](TESTING.md)
+* Um die Tests auszuführen: siehe [TESTING.md](docs/TESTING.md)
 * Um das Uberjar lokal für jedes Betriebssystem zu bauen:
   * `clj -M:prod uberjar windows`
   * `clj -M:prod uberjar macos`
