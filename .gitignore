@@ -9,3 +9,5 @@ Clojure-code/
 .*
 !.gitignore
 !.github/
+actionlint/
+actionlint.zip
