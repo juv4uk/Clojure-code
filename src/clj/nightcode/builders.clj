@@ -204,9 +204,7 @@
               (refresh-builder! webview (= cmd "repl") pref-state)
               (start-builder-process! webview pipes *process start-str
                 (case system
-                  :lein #(proc/start-java-process! *process project-path [l/class-name cmd])
-                  :boot #(proc/start-process! *process project-path ["java" "-jar" (u/get-boot-path!) "--no-colors"
-                                                                     (if (= cmd "repl") "bare-repl" cmd)])))))
+                  :lein #(proc/start-java-process! *process project-path [l/class-name cmd])))))
           (swap! *runtime-state assoc-in [:processes project-path] *process))))))
 
 (fdef stop-builder!

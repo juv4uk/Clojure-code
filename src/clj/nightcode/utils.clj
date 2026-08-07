@@ -163,38 +163,6 @@
       (str/escape {\return ""})
       (str/replace #"\u001b[^\n]*" "")))
 
-(fdef get-boot-path!
-  :args (s/cat)
-  :ret string?)
-
-(defn get-boot-path! []
-  ;; DEPRECATED: Boot is no longer maintained. This function exists only for
-  ;; backward compatibility and will be removed in a future version.
-  (binding [*out* *err*]
-    (println "WARNING: Boot build system is deprecated and no longer supported."))
-  (let [file-name "boot-2.7.2.jar"
-        file (io/file (System/getProperty "user.home") (str ".nightcode-" file-name))]
-    (when-not (.exists file)
-      (-> file-name io/resource io/input-stream (io/copy file)))
-    (.getCanonicalPath file)))
-
-(fdef get-boot-tasks
-  :args (s/cat :project-path string?)
-  :ret (s/coll-of string?))
-
-(defn get-boot-tasks [project-path]
-  (try
-    (let [path (.getCanonicalPath (io/file project-path "build.boot"))
-          rdr (java.io.PushbackReader. (io/reader path))]
-      (loop [tasks []]
-        (if-let [form (try (read rdr)
-                        (catch Exception _))]
-          (if (= 'deftask (first form))
-            (recur (conj tasks (str (second form))))
-            (recur tasks))
-          tasks)))
-    (catch Exception _ [])))
-
 (fdef normalize-text-size
   :args (s/cat :num number?)
   :ret (s/and number? even?))
