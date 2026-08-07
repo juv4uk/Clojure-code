@@ -64,14 +64,15 @@
             project-name (-> file .getName u/sanitize-name)
             file (io/file dir project-name)]
         (try
-          (let [create-project! (fn []
-                                   (lein/new! dir project-type project-name)
-                                   (when (.exists file)
-                                     (swap! *pref-state update :project-set conj (.getCanonicalPath file))
-                                     (p/update-project-tree! *pref-state project-tree (.getCanonicalPath file))))]
-            (if (:dev? @*runtime-state)
-              (create-project!)
-              ((es/wrap-security create-project!))))
+          (cond-> (fn []
+                    (lein/new! dir project-type project-name)
+                    (when (.exists file)
+                      (swap! *pref-state update :project-set conj (.getCanonicalPath file))
+                      (p/update-project-tree! *pref-state project-tree (.getCanonicalPath file))))
+                  (not (:dev? @*runtime-state))
+                  es/wrap-security
+                  true
+                  (apply []))
           (catch Exception e
             (.printStackTrace e)))))))
 
