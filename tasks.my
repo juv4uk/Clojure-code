@@ -1,0 +1,11 @@
+; tasks.my — durable task plan for Clojure-code.
+
+((tasks . (
+  ("CLOJURE-CODE-CLARIFY-ECOSYSTEM-RELATIONSHIP" . (
+    (priority . 2.5)
+    (capabilities . (documentation))
+    (origin . Clojure-code)
+    (description . "Appears to be a personal Clojure learning/practice repository (banner-style README, no repo.my, no AGENTS.md-declared ecosystem role beyond the generic collaboration-discipline doc). Confirm whether this repo has any actual relationship to the my-lisp/wsm ecosystem (e.g. informing cross-substrate comparison the way Guile does) or is genuinely independent -- a one-line note either way prevents a future agent from assuming a connection that doesn't exist.")
+    (done . ())
+  ))
+)))
